@@ -30,24 +30,31 @@ public class MainActivity extends AppCompatActivity {
         adapter = new CupAdapter(viewModel.getCopos().getValue(), viewModel);
         recyclerView.setAdapter(adapter);
 
-        // Configurar observadores
+        // Configurar observadores para atualizar a UI quando os dados mudarem
         viewModel.getCopos().observe(this, copos -> {
             adapter.setCopos(copos);
             atualizarUI();
         });
 
+        viewModel.getAguaTotal().observe(this, aguaTotal -> {
+            atualizarUI();
+        });
+
         viewModel.getPeso().observe(this, peso -> {
             binding.editTextPeso.setText(peso);
+            atualizarUI();
         });
 
         // Configurar botões
         binding.buttonCalcular.setOnClickListener(v -> {
             String peso = binding.editTextPeso.getText().toString();
             viewModel.calcularAgua(peso);
+            // A UI será atualizada automaticamente pelos observadores
         });
 
         binding.buttonLimpar.setOnClickListener(v -> {
             viewModel.limparCopos();
+            // A UI será atualizada automaticamente pelos observadores
         });
 
         // Inicializar a UI
